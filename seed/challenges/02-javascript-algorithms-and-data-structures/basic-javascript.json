@@ -2621,10 +2621,11 @@
       ],
       "tail": [],
       "solutions": [
-        "function timesFive(num) {\n  return num * 5;\n}"
+        "function timesFive(num) {\n  return num * 5;\n}\ntimesFive(10);"
       ],
       "tests": [
         "assert(typeof timesFive === 'function', 'message: <code>timesFive</code> should be a function');",
+        "assert(code.match(/timesFive\\(\\s*\\d+\\s*\\)/g), 'message: function <code>timesFive</code> should be called with a number');",
         "assert(timesFive(5) === 25, 'message: <code>timesFive(5)</code> should return <code>25</code>');",
         "assert(timesFive(2) === 10, 'message: <code>timesFive(2)</code> should return <code>10</code>');",
         "assert(timesFive(0) === 0, 'message: <code>timesFive(0)</code> should return <code>0</code>');"
@@ -3679,10 +3680,11 @@
         "In the game of <a href=\"https://en.wikipedia.org/wiki/Golf\" target=\"_blank\">golf</a> each hole has a <code>par</code> meaning the average number of <code>strokes</code> a golfer is expected to make in order to sink the ball in a hole to complete the play. Depending on how far above or below <code>par</code> your <code>strokes</code> are, there is a different nickname.",
         "Your function will be passed <code>par</code> and <code>strokes</code> arguments. Return the correct string according to this table which lists the strokes in order of priority; top (highest) to bottom (lowest):",
         "<table class=\"table table-striped\"><thead><tr><th>Strokes</th><th>Return</th></tr></thead><tbody><tr><td>1</td><td>\"Hole-in-one!\"</td></tr><tr><td>&lt;= par - 2</td><td>\"Eagle\"</td></tr><tr><td>par - 1</td><td>\"Birdie\"</td></tr><tr><td>par</td><td>\"Par\"</td></tr><tr><td>par + 1</td><td>\"Bogey\"</td></tr><tr><td>par + 2</td><td>\"Double Bogey\"</td></tr><tr><td>&gt;= par + 3</td><td>\"Go Home!\"</td></tr></tbody></table>",
-        "<code>par</code> and <code>strokes</code> will always be numeric and positive."
+        "<code>par</code> and <code>strokes</code> will always be numeric and positive. We have added an array of all the names for your convenience."
       ],
       "releasedOn": "January 1, 2016",
       "challengeSeed": [
+        "var names = [\"Hole-in-one!\", \"Eagle\", \"Birdie\", \"Par\", \"Bogey\", \"Double Bogey\", \"Go Home!\"];",
         "function golfScore(par, strokes) {",
         "  // Only change code below this line",
         "  ",
@@ -3730,7 +3732,7 @@
       "description": [
         "If you have many options to choose from, use a <code>switch</code> statement. A <code>switch</code> statement tests a value and can have many <code>case</code> statements which define various possible values. Statements are executed from the first matched <code>case</code> value until a <code>break</code> is encountered.",
         "Here is a <dfn>pseudocode</dfn> example:",
-        "<blockquote>switch (num) {<br>  case value1:<br>    statement1;<br>    break;<br>  case value2:<br>    statement2;<br>    break;<br>...<br>  case valueN:<br>    statementN;<br>    break;<br>}</blockquote>",
+        "<blockquote>switch(num) {<br>  case value1:<br>    statement1;<br>    break;<br>  case value2:<br>    statement2;<br>    break;<br>...<br>  case valueN:<br>    statementN;<br>    break;<br>}</blockquote>",
         "<code>case</code> values are tested with strict equality (<code>===</code>). The <code>break</code> tells JavaScript to stop executing statements. If the <code>break</code> is omitted, the next statement will be executed.",
         "<hr>",
         "Write a switch statement which tests <code>val</code> and sets <code>answer</code> for the following conditions:<br><code>1</code> - \"alpha\"<br><code>2</code> - \"beta\"<br><code>3</code> - \"gamma\"<br><code>4</code> - \"delta\""
@@ -3752,7 +3754,7 @@
         ""
       ],
       "solutions": [
-        "function caseInSwitch(val) {\n  var answer = \"\";\n\n  switch (val) {\n    case 1:\n      answer = \"alpha\";\n      break;\n    case 2:\n      answer = \"beta\";\n      break;\n    case 3:\n      answer = \"gamma\";\n      break;\n    case 4:\n      answer = \"delta\";\n  }\n  return answer;  \n}"
+        "function caseInSwitch(val) {\n  var answer = \"\";\n\n  switch(val) {\n    case 1:\n      answer = \"alpha\";\n      break;\n    case 2:\n      answer = \"beta\";\n      break;\n    case 3:\n      answer = \"gamma\";\n      break;\n    case 4:\n      answer = \"delta\";\n  }\n  return answer;  \n}"
       ],
       "tests": [
         "assert(caseInSwitch(1) === \"alpha\", 'message: <code>caseInSwitch(1)</code> should have a value of \"alpha\"');",
@@ -3773,7 +3775,7 @@
           "description": [
             "Si tienes varias opciones para elegir, usa una sentencia <code>switch</code>. Una sentencia <code>switch</code> prueba un valor y puede tener varias sentencias <code>case</code> las cuales definen varios posibles valores. Las sentencias son ejecutadas desde el primer valor <code>case</code> igualado hasta que se encuentr un <code>break</code>.",
             "Aquí hay un <dfn>pseudocódigo</dfn> de ejemplo:",
-            "<blockquote>switch (num) {<br>  case valor1:<br>    sentencia1;<br>    break;<br>  case valor2:<br>    sentencia2;<br>    break;<br>...<br>  case valorN:<br>    sentenciaN;<br>    break;<br>}</blockquote>",
+            "<blockquote>switch(num) {<br>  case valor1:<br>    sentencia1;<br>    break;<br>  case valor2:<br>    sentencia2;<br>    break;<br>...<br>  case valorN:<br>    sentenciaN;<br>    break;<br>}</blockquote>",
             "Los valores <code>case</code> son probados con estricta igualdad (<code>===</code>). El <code>break</code> le dice a JavaScript que pare la ejecución del bloque de sentencias en el que está. Si se omite <code>break</code>, se ejecutará la siguiente sentencia.",
             "<h4>Instrucciones</h4>",
             "Escribe una sentencia <code>switch</code> que pruebe <code>val</code> y establezca <code>answer</code> para las siguientes condiciones:<br><code>1</code> - \"alpha\"<br><code>2</code> - \"beta\"<br><code>3</code> - \"gamma\"<br><code>4</code> - \"delta\""
@@ -3787,7 +3789,7 @@
       "description": [
         "In a <code>switch</code> statement you may not be able to specify all possible values as <code>case</code> statements. Instead, you can add the <code>default</code> statement which will be executed if no matching <code>case</code> statements are found. Think of it like the final <code>else</code> statement in an <code>if/else</code> chain.",
         "A <code>default</code> statement should be the last case.",
-        "<blockquote>switch (num) {<br>  case value1:<br>    statement1;<br>    break;<br>  case value2:<br>    statement2;<br>    break;<br>...<br>  default:<br>    defaultStatement;<br>}</blockquote>",
+        "<blockquote>switch (num) {<br>  case value1:<br>    statement1;<br>    break;<br>  case value2:<br>    statement2;<br>    break;<br>...<br>  default:<br>    defaultStatement;<br>    break;<br>}</blockquote>",
         "<hr>",
         "Write a switch statement to set <code>answer</code> for the following conditions:<br><code>\"a\"</code> - \"apple\"<br><code>\"b\"</code> - \"bird\"<br><code>\"c\"</code> - \"cat\"<br><code>default</code> - \"stuff\""
       ],
@@ -3828,7 +3830,7 @@
           "description": [
             "En una sentencia <code>switch</code> puede que no seas capaz de especificar todos los posibles valores en las sentencias <code>case</code>. En su lugar, puedes agregar la sentencia <code>default</code> la cual será ejecutada si no es encontrada ninguna coincidencia con alguna sentencia <code>case</code>. Piensa en esto como la última sentencia <code>else</code> en una cadena <code>if/else</code>.",
             "Una sentencia <code>default</code> debería ser el último caso.",
-            "<blockquote>switch (num) {<br>  case valor1:<br>    sentencia1;<br>    break;<br>  case valor2:<br>    sentencia2;<br>    break;<br>...<br>  default:<br>    sentenciaDefault;<br>}</blockquote>",
+            "<blockquote>switch(num) {<br>  case valor1:<br>    sentencia1;<br>    break;<br>  case valor2:<br>    sentencia2;<br>    break;<br>...<br>  default:<br>    sentenciaDefault;<br>}</blockquote>",
             "<h4>Instrucciones</h4>",
             "Escribe una sentencia switch para establecer <code>answer</code> para las siguientes condiciones:<br><code>\"a\"</code> - \"apple\"<br><code>\"b\"</code> - \"bird\"<br><code>\"c\"</code> - \"cat\"<br><code>default</code> - \"stuff\""
           ]
@@ -3863,7 +3865,7 @@
         ""
       ],
       "solutions": [
-        "function sequentialSizes(val) {\n  var answer = \"\";\n  \n  switch (val) {\n    case 1:\n    case 2:\n    case 3:\n      answer = \"Low\";\n      break;\n    case 4:\n    case 5:\n    case 6:\n      answer = \"Mid\";\n      break;\n    case 7:\n    case 8:\n    case 9:\n      answer = \"High\";\n  }\n  \n  return answer;  \n}"
+        "function sequentialSizes(val) {\n  var answer = \"\";\n  \n  switch(val) {\n    case 1:\n    case 2:\n    case 3:\n      answer = \"Low\";\n      break;\n    case 4:\n    case 5:\n    case 6:\n      answer = \"Mid\";\n      break;\n    case 7:\n    case 8:\n    case 9:\n      answer = \"High\";\n  }\n  \n  return answer;  \n}"
       ],
       "tests": [
         "assert(sequentialSizes(1) === \"Low\", 'message: <code>sequentialSizes(1)</code> should return \"Low\"');",
@@ -3901,7 +3903,7 @@
         "If you have many options to choose from, a <code>switch</code> statement can be easier to write than many chained <code>if</code>/<code>else if</code> statements. The following:",
         "<blockquote>if (val === 1) {<br>  answer = \"a\";<br>} else if (val === 2) {<br>  answer = \"b\";<br>} else {<br>  answer = \"c\";<br>}</blockquote>",
         "can be replaced with:",
-        "<blockquote>switch (val) {<br>  case 1:<br>    answer = \"a\";<br>    break;<br>  case 2:<br>    answer = \"b\";<br>    break;<br>  default:<br>    answer = \"c\";<br>}</blockquote>",
+        "<blockquote>switch(val) {<br>  case 1:<br>    answer = \"a\";<br>    break;<br>  case 2:<br>    answer = \"b\";<br>    break;<br>  default:<br>    answer = \"c\";<br>}</blockquote>",
         "<hr>",
         "Change the chained <code>if</code>/<code>else if</code> statements into a <code>switch</code> statement."
       ],
@@ -3932,7 +3934,7 @@
         ""
       ],
       "solutions": [
-        "function chainToSwitch(val) {\n  var answer = \"\";\n\n  switch (val) {\n    case \"bob\":\n      answer = \"Marley\";\n      break;\n    case 42:\n      answer = \"The Answer\";\n      break;\n    case 1:\n      answer = \"There is no #1\";\n      break;\n    case 99:\n      answer = \"Missed me by this much!\";\n      break;\n    case 7:\n      answer = \"Ate Nine\";\n  }\n  return answer;  \n}"
+        "function chainToSwitch(val) {\n  var answer = \"\";\n\n  switch(val) {\n    case \"bob\":\n      answer = \"Marley\";\n      break;\n    case 42:\n      answer = \"The Answer\";\n      break;\n    case 1:\n      answer = \"There is no #1\";\n      break;\n    case 99:\n      answer = \"Missed me by this much!\";\n      break;\n    case 7:\n      answer = \"Ate Nine\";\n  }\n  return answer;  \n}"
       ],
       "tests": [
         "assert(!/else/g.test(code), 'message: You should not use any <code>else</code> statements anywhere in the editor');",
@@ -3955,7 +3957,7 @@
             "Si tienes varias opciones para elegir, una sentencia <code>switch</code> puede ser más fácil de escribir que varias sentencias <code>if</code>/<code>if else</code> anidadas. Lo siguiente:",
             "<blockquote>if (val === 1) {<br>  respuesta = \"a\";<br>} else if (val === 2) {<br>  respuesta = \"b\";<br>} else {<br>  respuesta = \"c\";<br>}</blockquote>",
             "puede ser reemplazado con:",
-            "<blockquote>switch (val) {<br>  case 1:<br>    respuesta = \"a\";<br>    break;<br>  case 2:<br>    respuesta = \"b\";<br>    break;<br>  default:<br>    respuesta = \"c\";<br>}</blockquote>",
+            "<blockquote>switch(val) {<br>  case 1:<br>    respuesta = \"a\";<br>    break;<br>  case 2:<br>    respuesta = \"b\";<br>    break;<br>  default:<br>    respuesta = \"c\";<br>}</blockquote>",
             "<h4>Instrucciones</h4>",
             "Cambia las sentencias <code>if</code>/<code>if else</code> anidadas dentro de una sentencia <code>switch</code>."
           ]

@@ -3,23 +3,31 @@ import ReactDom from 'react-dom';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import PureComponent from 'react-pure-render/component';
-import { Col, Row } from 'react-bootstrap';
 
 import ns from './ns.json';
 
+import ToolPanel from './Tool-Panel.jsx';
 import ChallengeTitle from '../../Challenge-Title.jsx';
+import ChallengeDescription from '../../Challenge-Description.jsx';
 import TestSuite from '../../Test-Suite.jsx';
 import Output from '../../Output.jsx';
-import ToolPanel from './Tool-Panel.jsx';
-import { challengeSelector } from '../../redux/selectors';
 import {
   openBugModal,
   updateHint,
   executeChallenge,
-  unlockUntrustedCode
-} from '../../redux/actions';
+  unlockUntrustedCode,
+
+  challengeMetaSelector,
+  testsSelector,
+  outputSelector,
+  hintIndexSelector,
+  codeLockedSelector,
+  chatRoomSelector
+} from '../../redux';
+
 import { descriptionRegex } from '../../utils';
-import { makeToast } from '../../../../toasts/redux/actions';
+import { challengeSelector } from '../../../../redux';
+import { makeToast } from '../../../../Toasts/redux';
 
 const mapDispatchToProps = {
   makeToast,
@@ -30,19 +38,18 @@ const mapDispatchToProps = {
 };
 const mapStateToProps = createSelector(
   challengeSelector,
-  state => state.challengesApp.tests,
-  state => state.challengesApp.output,
-  state => state.challengesApp.hintIndex,
-  state => state.challengesApp.isCodeLocked,
-  state => state.challengesApp.helpChatRoom,
+  challengeMetaSelector,
+  testsSelector,
+  outputSelector,
+  hintIndexSelector,
+  codeLockedSelector,
+  chatRoomSelector,
   (
     {
-      challenge: {
-        description,
-        hints = []
-      } = {},
-      title
+      description,
+      hints = []
     },
+    { title },
     tests,
     output,
     hintIndex,
@@ -125,14 +132,9 @@ export class SidePanel extends PureComponent {
           <ChallengeTitle>
             { title }
           </ChallengeTitle>
-          <Row>
-            <Col
-              className={ `${ns}-instructions` }
-              xs={ 12 }
-              >
-              { this.renderDescription(description) }
-            </Col>
-          </Row>
+          <ChallengeDescription>
+            { this.renderDescription(description) }
+          </ChallengeDescription>
         </div>
         <ToolPanel
           executeChallenge={ executeChallenge }
