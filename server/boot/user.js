@@ -6,8 +6,13 @@ import emoji from 'node-emoji';
 
 import {
   frontEndChallengeId,
-  dataVisChallengeId,
-  backEndChallengeId
+  backEndChallengeId,
+  respWebDesignId,
+  frontEndLibsId,
+  jsAlgoDataStructId,
+  dataVisId,
+  apisMicroservicesId,
+  infosecQaId
 } from '../utils/constantStrings.json';
 import certTypes from '../utils/certTypes.json';
 import {
@@ -17,7 +22,7 @@ import {
 } from '../utils/middleware';
 import { observeQuery } from '../utils/rx';
 import {
-  prepUniqueDays,
+  prepUniqueDaysByHours,
   calcCurrentStreak,
   calcLongestStreak
 } from '../utils/user-stats';
@@ -28,22 +33,40 @@ const debug = debugFactory('fcc:boot:user');
 const sendNonUserToMap = ifNoUserRedirectTo('/map');
 const certIds = {
   [certTypes.frontEnd]: frontEndChallengeId,
-  [certTypes.dataVis]: dataVisChallengeId,
-  [certTypes.backEnd]: backEndChallengeId
+  [certTypes.backEnd]: backEndChallengeId,
+  [certTypes.respWebDesign]: respWebDesignId,
+  [certTypes.frontEndLibs]: frontEndLibsId,
+  [certTypes.jsAlgoDataStruct]: jsAlgoDataStructId,
+  [certTypes.dataVis]: dataVisId,
+  [certTypes.apisMicroservices]: apisMicroservicesId,
+  [certTypes.infosecQa]: infosecQaId
 };
 
 const certViews = {
   [certTypes.frontEnd]: 'certificate/front-end.jade',
-  [certTypes.dataVis]: 'certificate/data-vis.jade',
   [certTypes.backEnd]: 'certificate/back-end.jade',
-  [certTypes.fullStack]: 'certificate/full-stack.jade'
+  [certTypes.fullStack]: 'certificate/full-stack.jade',
+  [certTypes.respWebDesign]: 'certificate/responsive-web-design.jade',
+  [certTypes.frontEndLibs]: 'certificate/front-end-libraries.jade',
+  [certTypes.jsAlgoDataStruct]:
+  'certificate/javascript-algorithms-and-data-structures.jade',
+  [certTypes.dataVis]: 'certificate/data-visualization.jade',
+  [certTypes.apisMicroservices]: 'certificate/apis-and-microservices.jade',
+  [certTypes.infosecQa]:
+  'certificate/information-security-and-quality-assurance.jade'
 };
 
 const certText = {
   [certTypes.frontEnd]: 'Front End certified',
-  [certTypes.dataVis]: 'Data Vis Certified',
   [certTypes.backEnd]: 'Back End Certified',
-  [certTypes.fullStack]: 'Full Stack Certified'
+  [certTypes.fullStack]: 'Full Stack Certified',
+  [certTypes.respWebDesign]: 'Responsive Web Design Certified',
+  [certTypes.frontEndLibs]: 'Front End Libraries Certified',
+  [certTypes.jsAlgoDataStruct]:
+  'JavaScript Algorithms and Data Structures Certified',
+  [certTypes.dataVis]: 'Data Visualization Certified',
+  [certTypes.apisMicroservices]: 'APIs and Microservices Certified',
+  [certTypes.infosecQa]: 'Information Security and Quality Assurance Certified'
 };
 
 const dateFormat = 'MMM DD, YYYY';
@@ -138,8 +161,9 @@ function buildDisplayChallenges(
 module.exports = function(app) {
   const router = app.loopback.Router();
   const api = app.loopback.Router();
-  const { User, Email } = app.models;
+  const { Email, User } = app.models;
   const map$ = cachedMap(app.models);
+
   function findUserByUsername$(username, fields) {
     return observeQuery(
       User,
@@ -151,23 +175,6 @@ module.exports = function(app) {
     );
   }
 
-  router.get('/login', function(req, res) {
-    res.redirect(301, '/signin');
-  });
-  router.get('/logout', function(req, res) {
-    res.redirect(301, '/signout');
-  });
-  router.get('/signup', getEmailSignup);
-  router.get('/signin', getSignin);
-  router.get('/signout', signout);
-  router.get('/forgot', getForgot);
-  api.post('/forgot', postForgot);
-  router.get('/reset-password', getReset);
-  api.post('/reset-password', postReset);
-  router.get('/email-signup', getEmailSignup);
-  router.get('/email-signin', getEmailSignin);
-  router.get('/deprecated-signin', getDepSignin);
-  router.get('/update-email', getUpdateEmail);
   router.get(
     '/delete-my-account',
     sendNonUserToMap,
@@ -207,11 +214,6 @@ module.exports = function(app) {
   );
 
   api.get(
-    '/:username/data-visualization-certification',
-    showCert.bind(null, certTypes.dataVis)
-  );
-
-  api.get(
     '/:username/back-end-certification',
     showCert.bind(null, certTypes.backEnd)
   );
@@ -219,6 +221,36 @@ module.exports = function(app) {
   api.get(
     '/:username/full-stack-certification',
     (req, res) => res.redirect(req.url.replace('full-stack', 'back-end'))
+  );
+
+  api.get(
+    '/:username/responsive-web-design-certification',
+    showCert.bind(null, certTypes.respWebDesign)
+  );
+
+  api.get(
+    '/:username/front-end-libraries-certification',
+    showCert.bind(null, certTypes.frontEndLibs)
+  );
+
+  api.get(
+    '/:username/javascript-algorithms-data-structures-certification',
+    showCert.bind(null, certTypes.jsAlgoDataStruct)
+  );
+
+ api.get(
+    '/:username/data-visualization-certification',
+    showCert.bind(null, certTypes.dataVis)
+  );
+
+  api.get(
+    '/:username/apis-microservices-certification',
+    showCert.bind(null, certTypes.apisMicroservices)
+  );
+
+  api.get(
+    '/:username/information-security-quality-assurance-certification',
+    showCert.bind(null, certTypes.infosecQa)
   );
 
   router.get('/:username', showUserProfile);
@@ -237,63 +269,6 @@ module.exports = function(app) {
 
   app.use('/:lang', router);
   app.use(api);
-
-  function getSignin(req, res) {
-    if (req.user) {
-      return res.redirect('/');
-    }
-    return res.render('account/signin', {
-      title: 'Sign in to freeCodeCamp'
-    });
-  }
-
-  function signout(req, res) {
-    req.logout();
-    res.redirect('/');
-  }
-
-
-  function getDepSignin(req, res) {
-    if (req.user) {
-      return res.redirect('/');
-    }
-    return res.render('account/deprecated-signin', {
-      title: 'Sign in to freeCodeCamp using a Deprecated Login'
-    });
-  }
-
-  function getUpdateEmail(req, res) {
-    if (!req.user) {
-      return res.redirect('/');
-    }
-    return res.render('account/update-email', {
-      title: 'Update your Email'
-    });
-  }
-
-  function getEmailSignin(req, res) {
-    if (req.user) {
-      return res.redirect('/');
-    }
-    return res.render('account/email-signin', {
-      title: 'Sign in to freeCodeCamp using your Email Address'
-    });
-  }
-
-  const isSignUpDisabled = !!process.env.DISABLE_SIGNUP;
-  function getEmailSignup(req, res) {
-    if (req.user) {
-      return res.redirect('/');
-    }
-    if (isSignUpDisabled) {
-      return res.render('account/beta', {
-        title: 'New sign ups are disabled'
-      });
-    }
-    return res.render('account/email-signup', {
-      title: 'Sign up for freeCodeCamp using your Email Address'
-    });
-  }
 
   function getAccount(req, res) {
     const { username } = req.user;
@@ -374,7 +349,7 @@ module.exports = function(app) {
     // not of the profile she is viewing
     const timezone = user && user.timezone ?
       user.timezone :
-      'UTC';
+      'EST';
 
     const query = {
       where: { username },
@@ -399,10 +374,10 @@ module.exports = function(app) {
               objOrNum.timestamp;
           });
 
-        const uniqueDays = prepUniqueDays(timestamps, timezone);
+        const uniqueHours = prepUniqueDaysByHours(timestamps, timezone);
 
-        userPortfolio.currentStreak = calcCurrentStreak(uniqueDays, timezone);
-        userPortfolio.longestStreak = calcLongestStreak(uniqueDays, timezone);
+        userPortfolio.currentStreak = calcCurrentStreak(uniqueHours, timezone);
+        userPortfolio.longestStreak = calcLongestStreak(uniqueHours, timezone);
 
         const calender = userPortfolio
           .progressTimestamps
@@ -424,7 +399,7 @@ module.exports = function(app) {
             msg: dedent`
               Upon review, this account has been flagged for academic
               dishonesty. If you’re the owner of this account contact
-              team@freecodecamp.com for details.
+              team@freecodecamp.org for details.
             `
           });
         }
@@ -468,9 +443,14 @@ module.exports = function(app) {
           isLocked: true,
           isAvailableForHire: true,
           isFrontEndCert: true,
-          isDataVisCert: true,
           isBackEndCert: true,
           isFullStackCert: true,
+          isRespWebDesignCert: true,
+          isFrontEndLibsCert: true,
+          isJsAlgoDataStructCert: true,
+          isDataVisCert: true,
+          isApisMicroservicesCert: true,
+          isInfosecQaCert: true,
           isHonest: true,
           username: true,
           name: true,
@@ -582,74 +562,6 @@ module.exports = function(app) {
     });
   }
 
-  function getReset(req, res) {
-    if (!req.accessToken) {
-      req.flash('errors', { msg: 'access token invalid' });
-      return res.render('account/forgot');
-    }
-    return res.render('account/reset', {
-      title: 'Reset your Password',
-      accessToken: req.accessToken.id
-    });
-  }
-
-  function postReset(req, res, next) {
-    const errors = req.validationErrors();
-    const { password } = req.body;
-
-    if (errors) {
-      req.flash('errors', errors);
-      return res.redirect('back');
-    }
-
-    return User.findById(req.accessToken.userId, function(err, user) {
-      if (err) { return next(err); }
-      return user.updateAttribute('password', password, function(err) {
-        if (err) { return next(err); }
-
-        debug('password reset processed successfully');
-        req.flash('info', { msg: 'You\'ve successfully reset your password.' });
-        return res.redirect('/');
-      });
-    });
-  }
-
-  function getForgot(req, res) {
-    if (req.isAuthenticated()) {
-      return res.redirect('/');
-    }
-    return res.render('account/forgot', {
-      title: 'Forgot Password'
-    });
-  }
-
-  function postForgot(req, res) {
-    req.validate('email', 'Email format is not valid').isEmail();
-    const errors = req.validationErrors();
-    const email = req.body.email.toLowerCase();
-
-    if (errors) {
-      req.flash('errors', errors);
-      return res.redirect('/forgot');
-    }
-
-    return User.resetPassword({
-      email: email
-    }, function(err) {
-      if (err) {
-        req.flash('errors', err.message);
-        return res.redirect('/forgot');
-      }
-
-      req.flash('info', {
-        msg: 'An e-mail has been sent to ' +
-        email +
-        ' with further instructions.'
-      });
-      return res.render('account/forgot');
-    });
-  }
-
   function getReportUserProfile(req, res) {
     const username = req.params.username.toLowerCase();
     return res.render('account/report-profile', {
@@ -672,9 +584,9 @@ module.exports = function(app) {
 
     return Email.send$({
       type: 'email',
-      to: 'Team@FreeCodeCamp.com',
+      to: 'team@freecodecamp.org',
       cc: user.email,
-      from: 'Team@FreeCodeCamp.com',
+      from: 'team@freecodecamp.org',
       subject: 'Abuse Report : Reporting ' + username + '\'s profile.',
       text: dedent(`
         Hello Team,\n
@@ -700,4 +612,5 @@ module.exports = function(app) {
       return res.redirect('/');
     });
   }
+
 };

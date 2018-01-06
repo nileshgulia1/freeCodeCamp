@@ -98,7 +98,7 @@
 }
 
 .@{ns}-block-time {
-  color: #BBBBBB;
+  color: #555555;
   @media (min-width: 721px) {
     float: right;
   }
@@ -121,7 +121,14 @@
   .@{ns}-accordion a:focus, #noneFound {
     color: #ABABAB;
   }
-  .challenge-title {
+  .@{ns}-challenge-title, .@{ns}-accordion-panel-heading {
+    background: @night-body-bg;
+    color: @night-text-color;
+    a {
+      color: @night-text-color;
+    }
+  }
+  .@{ns}-caret {
     color: @night-text-color;
   }
 }

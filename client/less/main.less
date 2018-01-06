@@ -126,9 +126,16 @@ h1, h2, h3, h4, h5, h6, p, li {
   margin: 2px;
 }
 
+.hide-test-frame {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+}
+
 .landing-icon {
-  height: 200px;
-  width: 200px;
+  height: 100px;
+  width: 100px;
 }
 
 .completion-icon {
@@ -259,7 +266,8 @@ h1, h2, h3, h4, h5, h6, p, li {
 }
 
 .btn-social {
-  width: 250px;
+  width: 100%;
+  max-width: 260px;
   margin: auto;
 }
 
@@ -271,10 +279,11 @@ h1, h2, h3, h4, h5, h6, p, li {
 
 a {
   font-weight: bold;
+  font-size : 15px;
 }
 
 p {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .map-aside-body p {
@@ -491,7 +500,7 @@ form.update-email .btn{
   }
 }
 
-.challenge-list-header {
+.challenges-list-header {
   background-color: @brand-primary;
   color: @gray-lighter;
   font-size: 36px;
@@ -642,6 +651,11 @@ hr {
   margin-right: -20px;
 }
 
+.public-profile-img {
+  height: 200px;
+  width: 200px;
+}
+
 .profile-social-icons {
   margin-left: 8px;
 }
@@ -675,6 +689,26 @@ code {
 
 .gitter-chat-embed {
  z-index: 20000 !important;
+}
+
+.email-settings {
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.toggle-btn-group {
+  float: right;
+  .btn[disabled] {
+    opacity: 1;
+  }
+  @media (max-width: 768px) {
+    float: none;
+    .btn-toggle {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+  }
 }
 
 
@@ -791,7 +825,7 @@ code {
   color: @night-text-color;
   .btn-group,
   .text-success,
-  .challenge-list-header,
+  .challenges-list-header,
   .fcc-footer {
     background-color: @night-body-bg;
   }
